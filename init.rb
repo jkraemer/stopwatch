@@ -16,7 +16,7 @@ Redmine::Plugin.register :stopwatch do
     caption: :button_log_time,
     html: { method: :get, id: 'stopwatch-toggle', 'data-remote': true },
     before: :my_account,
-    if: ->(*_){ User.current.logged? }
+    if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
 
 Rails.configuration.to_prepare do
