@@ -9,13 +9,14 @@
 </tr></thead>
 <tbody>
 <% for entry in entries %>
-  <tr id="time-entry-<%= entry.id %>" class="time-entry <%= cycle "odd", "even" %>">
+  <% running = User.current.is_running_timer?(entry) %>
+  <tr id="time-entry-<%= entry.id %>" class="time-entry <%= cycle "odd", "even" %><%= ' running' if running %>">
     <td class="activity"><%= entry.activity %></td>
     <td class="subject"><%= entry.project %> <%= h(' - ') + link_to_issue(entry.issue, truncate: 50) if entry.issue %></td>
     <td class="comments"><%= entry.comments %></td>
     <td class="hours"><%= html_hours(format_hours(entry.hours)) %></td>
     <td class="buttons">
-      <% if User.current.is_running_timer?(entry) %>
+      <% if running %>
         <%= link_to t(:label_stopwatch_stop), stop_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
       <% else %>
         <%= link_to t(:label_stopwatch_start), start_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
