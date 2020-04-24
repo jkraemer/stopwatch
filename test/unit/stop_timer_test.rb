@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-class StartTimerTest < ActiveSupport::TestCase
+class StopTimerTest < ActiveSupport::TestCase
   fixtures :users, :user_preferences, :time_entries, :projects,
     :roles, :member_roles, :members, :enumerations, :enabled_modules
 
@@ -11,14 +11,7 @@ class StartTimerTest < ActiveSupport::TestCase
     @time_entry.update_column :issue_id, nil
   end
 
-  test "should start timer" do
-    refute User.find(@user.id).timer_running?
-    assert r = Stopwatch::StartTimer.new(@time_entry, user: @user).call
-    assert r.success?, r.inspect
-    assert User.find(@user.id).timer_running?
-  end
-
-  test "should stop and save existing timer" do
+  test "should stop and save timer" do
     hours = @time_entry.hours
     r = Stopwatch::StartTimer.new(@time_entry, user: @user).call
     assert r.success?
@@ -29,14 +22,13 @@ class StartTimerTest < ActiveSupport::TestCase
 
     @time_entry.reload
     assert_equal hours, @time_entry.hours
-    another = TimeEntry.new(@time_entry.attributes)
-    another.user = @user
-    r = Stopwatch::StartTimer.new(another, user: @user).call
+    r = Stopwatch::StopTimer.new(user: @user).call
     assert r.success?
     @time_entry.reload
     assert_equal hours+1, @time_entry.hours
   end
 
 end
+
 
 

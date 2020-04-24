@@ -1,0 +1,31 @@
+<% if entries.any? %>
+<table class="list time-entries odd-even">
+<thead><tr>
+<th><%= l(:label_activity) %></th>
+<th><%= l(:label_project) %></th>
+<th><%= l(:field_comments) %></th>
+<th><%= l(:field_hours) %></th>
+<th></th>
+</tr></thead>
+<tbody>
+<% for entry in entries %>
+  <tr id="time-entry-<%= entry.id %>" class="time-entry <%= cycle "odd", "even" %>">
+    <td class="activity"><%= entry.activity %></td>
+    <td class="subject"><%= entry.project %> <%= h(' - ') + link_to_issue(entry.issue, truncate: 50) if entry.issue %></td>
+    <td class="comments"><%= entry.comments %></td>
+    <td class="hours"><%= html_hours(format_hours(entry.hours)) %></td>
+    <td class="buttons">
+      <% if User.current.is_running_timer?(entry) %>
+        <%= link_to t(:label_stopwatch_stop), stop_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
+      <% else %>
+        <%= link_to t(:label_stopwatch_start), start_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
+      <% end %>
+      <%= link_to l(:button_edit), edit_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-edit" if entry.editable_by? User.current %>
+    </td>
+  </tr>
+<% end -%>
+</tbody>
+</table>
+<% end %>
+
+

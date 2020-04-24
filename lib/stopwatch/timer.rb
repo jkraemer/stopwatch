@@ -21,7 +21,7 @@ module Stopwatch
 
     def stop
       if hours = runtime_hours and
-          time_entry = TimeEntry.find_by_id(data[:time_entry_id])
+          time_entry = TimeEntry.find_by_id(time_entry_id)
 
         time_entry.update_column :hours, time_entry.hours + hours
       end
@@ -29,9 +29,20 @@ module Stopwatch
       save
     end
 
+    def to_json
+      {
+        time_entry_id: time_entry_id,
+        running: running?
+      }.to_json
+    end
+
     def save
       user.pref[:current_timer] = data.to_json
       user.pref.save
+    end
+
+    def time_entry_id
+      data[:time_entry_id]
     end
 
     private

@@ -1,1 +1,12 @@
 en:
+  label_stopwatch_start: Start tracking
+  label_stopwatch_stop: Stop tracking
+  stopwatch_timers:
+    entries_list:
+      button_stop: Stop
+      button_resume: Resume
+    entry_form:
+      legend_new: New entry
+      legend_edit: Edit entry
+    edit:
+      button_save_and_continue: Save and continue

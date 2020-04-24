@@ -1,12 +1,14 @@
-<h3 class="title"><%= l(:button_log_time) %></h3>
+<h3 class="title"><%= l(:button_log_time) %> - <%= format_date User.current.today %></h3>
 
-<%= labelled_form_for @time_entry, url: stopwatch_timer_path, method: :post, remote: true do |f| %>
+<%= render partial: 'entries_list', locals: { entries: @entries } %>
+
+<%= labelled_form_for @time_entry, url: stopwatch_timers_path, method: :post, remote: true do |f| %>
   <% @time_entry.hours ||= 0 %>
-  <%= render partial: 'timelog/form', locals: { f: f } %>
+  <%= render partial: 'entry_form', locals: { f: f } %>
 
   <p class="buttons">
     <%= submit_tag l(:button_create) %>
-    <%= submit_tag l(:button_cancel), name: nil, onclick: "hideModal(this);", type: 'button' %>
+    <%#= submit_tag l(:button_cancel), name: nil, onclick: "hideModal(this);", type: 'button' %>
   </p>
 <% end %>
 

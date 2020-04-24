@@ -1,0 +1,9 @@
+<% if params[:context] %>
+  contextMenuHide();
+<% else %>
+  hideModal();
+  $('#ajax-modal').html('<%= j render partial: 'new' %>');
+  showModal('ajax-modal', '700px');
+<% end %>
+Stopwatch.highlightTimer('<%= @started_time_entry.id if @started_time_entry %>');
+

@@ -1,0 +1,10 @@
+<% if @time_entries.one? %>
+  <% time_entry = @time_entries.first %>
+  <li>
+    <% if User.current.is_running_timer? time_entry %>
+      <%= context_menu_link l(:label_stopwatch_stop), stop_stopwatch_timer_path(time_entry, context: '1'), class: 'icon-time', remote: true, method: :put %>
+    <% else %>
+      <%= context_menu_link l(:label_stopwatch_start), start_stopwatch_timer_path(time_entry, context: '1'), class: 'icon-time', remote: true, method: :put %>
+    <% end %>
+  </li>
+<% end %>

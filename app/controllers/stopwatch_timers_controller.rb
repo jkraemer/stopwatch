@@ -1,12 +1,23 @@
+# weiter
+#
+# - update time entry row after context menu stop (reflect saved time)
+# - show current time in menu item / window title
+# - remember last activity, preselect that in 'new' form
+# - same for project, unless we are in a project context
+# - focus first field that needs an action, depending on above
+#
 class StopwatchTimersController < ApplicationController
   helper :timelog
 
   before_action :require_login
   before_action :find_optional_data, only: %i(new create)
+  before_action :authorize_log_time, only: %i(new create start stop current)
+  before_action :find_time_entry, only: %i(edit update start stop)
+  before_action :authorize_edit_time, only: %i(edit update)
 
   def new
     @time_entry = new_time_entry
-    respond_to :js
+    load_todays_entries
   end
 
   def create
@@ -23,14 +34,53 @@ class StopwatchTimersController < ApplicationController
   end
 
   def edit
-
+    @entries = load_todays_entries #.where.not(id: @time_entry.id)
   end
 
   def update
+    # todo update entry
+    if params[:continue]
+      new
+    end
+  end
 
+  def start
+    r = Stopwatch::StartTimer.new(@time_entry).call
+    if r.success?
+      @started_time_entry = @time_entry
+    else
+      logger.error "unable to start timer: #{r.error}"
+    end
+    new unless params[:context]
+  end
+
+  def stop
+    r = Stopwatch::StopTimer.new().call
+    unless r.success?
+      logger.error "unable to stop timer"
+    end
+    new unless params[:context]
+    render action: 'start'
+  end
+
+  def current
+    timer = Stopwatch::Timer.new User.current
+    render json: timer.to_json
   end
 
   private
+
+  def find_time_entry
+    @time_entry = time_entries.find params[:id]
+  end
+
+  def load_todays_entries
+    @entries = time_entries.where(spent_on: User.current.today).order(created_on: :asc)
+  end
+
+  def time_entries
+    TimeEntry.where(user: User.current)
+  end
 
   def new_time_entry
     TimeEntry.new(project: @project, issue: @issue,
@@ -48,4 +98,12 @@ class StopwatchTimersController < ApplicationController
     render_404
   end
 
+  def authorize_log_time
+    User.current.allowed_to?(:log_time, nil, global: true) or
+      deny_access
+  end
+
+  def authorize_edit_time
+    @time_entry.editable_by?(User.current) or deny_access
+  end
 end

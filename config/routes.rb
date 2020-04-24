@@ -1,2 +1,10 @@
-resource :stopwatch_timer, only: %i(new create edit update)
+resources :stopwatch_timers, only: %i(new create edit update) do
+  collection do
+    get :current
+  end
+  member do
+    put :start
+    put :stop
+  end
+end
 
