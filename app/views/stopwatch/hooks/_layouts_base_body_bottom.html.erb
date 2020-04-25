@@ -1,3 +1,11 @@
 <%= javascript_tag do %>
-  Stopwatch.currentTimerUrl = '<%= j current_stopwatch_timers_url %>';
+  window.stopwatch = window.initStopwatch({
+    currentTimerUrl: '<%= j current_stopwatch_timers_url %>',
+    hourFormat: '<%= j format_hours 0.0 %>'
+  });
+  <% if User.current.logged? %>
+    window.stopwatch.highlightRunningTimer(
+      <%= raw Stopwatch::Timer.new(User.current).to_json %>
+    )
+  <% end %>
 <% end %>

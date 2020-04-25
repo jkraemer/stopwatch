@@ -1,7 +1,7 @@
 # weiter
 #
 # - update time entry row after context menu stop (reflect saved time)
-# - show current time in menu item / window title
+#
 # - remember last activity, preselect that in 'new' form
 # - same for project, unless we are in a project context
 # - focus first field that needs an action, depending on above
@@ -14,6 +14,7 @@ class StopwatchTimersController < ApplicationController
   before_action :authorize_log_time, only: %i(new create start stop current)
   before_action :find_time_entry, only: %i(edit update start stop)
   before_action :authorize_edit_time, only: %i(edit update)
+  before_action :find_timer, only: %i(new edit current)
 
   def new
     @time_entry = new_time_entry
@@ -55,7 +56,7 @@ class StopwatchTimersController < ApplicationController
   end
 
   def stop
-    r = Stopwatch::StopTimer.new().call
+    r = Stopwatch::StopTimer.new.call
     unless r.success?
       logger.error "unable to stop timer"
     end
@@ -64,14 +65,19 @@ class StopwatchTimersController < ApplicationController
   end
 
   def current
-    timer = Stopwatch::Timer.new User.current
-    render json: timer.to_json
+    render json: @timer.to_json
   end
 
   private
 
+  def find_timer
+    @timer = Stopwatch::Timer.new User.current
+    @timer.update
+  end
+
   def find_time_entry
     @time_entry = time_entries.find params[:id]
+
   end
 
   def load_todays_entries

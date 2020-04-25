@@ -2,6 +2,24 @@ require 'json'
 
 module Stopwatch
   class Timer
+
+    class HourFormatter
+      include ApplicationHelper
+
+      def initialize(s)
+        @s = s
+      end
+
+      def html_hours
+        super format_hours
+      end
+
+      def format_hours
+        super @s
+      end
+    end
+
+
     attr_reader :user
 
     def initialize(user)
@@ -20,18 +38,33 @@ module Stopwatch
     end
 
     def stop
-      if hours = runtime_hours and
-          time_entry = TimeEntry.find_by_id(time_entry_id)
+      update stop: true
+    end
 
-        time_entry.update_column :hours, time_entry.hours + hours
+    # saves currently logged time to the time entry and resets the started_at
+    # timestamp to either nil (stop: true) or current time.
+    def update(stop: false)
+      if hours = runtime_hours and entry = self.time_entry
+        time_entry.update_column :hours, entry.hours + hours
       end
-      data[:started_at] = nil
+      data[:started_at] = stop || !running? ? nil : Time.now.to_i
       save
     end
 
+    def time_spent
+      h = runtime_hours || 0
+      if e = time_entry
+        h += e.hours
+      end
+      h
+    end
+
     def to_json
+      formatter = HourFormatter.new(time_spent)
       {
         time_entry_id: time_entry_id,
+        time_spent: formatter.format_hours,
+        html_time_spent: formatter.html_hours,
         running: running?
       }.to_json
     end
@@ -43,6 +76,10 @@ module Stopwatch
 
     def time_entry_id
       data[:time_entry_id]
+    end
+
+    def time_entry
+      TimeEntry.find_by_id(time_entry_id)
     end
 
     private

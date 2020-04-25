@@ -33,6 +33,16 @@ class TimerTest < ActiveSupport::TestCase
     assert_equal hours + 1, @time_entry.hours
   end
 
+  test "should update time entry" do
+    hours = @time_entry.hours
+    @timer.start @time_entry
+    @data[:started_at] = 1.hour.ago.to_i
+    @timer.update
+
+    @time_entry.reload
+    assert_equal hours + 1, @time_entry.hours
+   end
+
   test "should save and restore" do
     hours = @time_entry.hours
     @timer.start @time_entry

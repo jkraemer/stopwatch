@@ -14,7 +14,7 @@ Redmine::Plugin.register :stopwatch do
   menu :account_menu, :stopwatch,
     :new_stopwatch_timer_path,
     caption: :button_log_time,
-    html: { method: :get, id: 'stopwatch-toggle', 'data-remote': true },
+    html: { method: :get, id: 'stopwatch-menu', 'data-remote': true },
     before: :my_account,
     if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
