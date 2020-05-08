@@ -1,3 +1,2 @@
 module Stopwatch
-
 end

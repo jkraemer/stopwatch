@@ -1,1 +1,4 @@
 hideModal();
+window.stopwatch.highlightRunningTimer(
+  <%= raw Stopwatch::Timer.new(User.current).to_json %>
+);

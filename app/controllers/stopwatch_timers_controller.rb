@@ -1,6 +1,8 @@
 # weiter
 #
+# - update title / menu item after starting new entry
 # - update time entry row after context menu stop (reflect saved time)
+# - 0:60 anstelle 1:00? Redmine-bug?
 #
 # - remember last activity, preselect that in 'new' form
 # - same for project, unless we are in a project context
@@ -39,8 +41,11 @@ class StopwatchTimersController < ApplicationController
   end
 
   def update
-    # todo update entry
-    if params[:continue]
+    @time_entry.safe_attributes = params[:time_entry]
+    @success = @time_entry.save
+    if !@success
+      edit
+    elsif params[:continue]
       new
     end
   end
@@ -89,8 +94,12 @@ class StopwatchTimersController < ApplicationController
   end
 
   def new_time_entry
-    TimeEntry.new(project: @project, issue: @issue,
-                  user: User.current, spent_on: User.current.today)
+    entry = TimeEntry.new(project: @project, issue: @issue,
+                          user: User.current, spent_on: User.current.today)
+    if entry.respond_to?(:author=) # Redmine 4
+      entry.author = User.current
+    end
+    entry
   end
 
   def find_optional_data
