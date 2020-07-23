@@ -29,7 +29,7 @@ class StartTimerTest < ActiveSupport::TestCase
 
     @time_entry.reload
     assert_equal hours, @time_entry.hours
-    another = TimeEntry.new(@time_entry.attributes)
+    another = TimeEntry.new(@time_entry.attributes.except('id'))
     another.user = @user
     r = Stopwatch::StartTimer.new(another, user: @user).call
     assert r.success?
