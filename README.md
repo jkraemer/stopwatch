@@ -16,6 +16,8 @@ Minimal plugin that aims to make tracking your time with Redmine much easier.
   in the window title.
 - Creating an entry with 0 minutes saves it in *running* state.
 
+![Screenshow](https://github.com/jkraemer/stopwatch/raw/screenshots/img/screenshot.png)
+
 ## Installation
 
 Add the plugin to your Redmine installation's `plugins` folder, restart
