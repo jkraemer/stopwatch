@@ -1,12 +1,10 @@
-require 'redmine'
-require_dependency 'stopwatch'
 require 'stopwatch/hooks'
 
 Redmine::Plugin.register :stopwatch do
   name 'Redmine Stopwatch Plugin'
   author 'Jens Krämer'
   author_url 'https://jkraemer.net/'
-  description 'Adds start/stop timer functionality'
+  description "Start/stop timer and quick access to today's time bookings for Redmine"
   version '0.1.0'
 
   requires_redmine version_or_higher: '3.4.0'

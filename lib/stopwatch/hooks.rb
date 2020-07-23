@@ -6,6 +6,5 @@ module Stopwatch
       partial: 'stopwatch/hooks/layouts_base_body_bottom'
     render_on :view_time_entries_context_menu_start,
       partial: 'stopwatch/hooks/time_entries_context_menu_start'
-
   end
 end
