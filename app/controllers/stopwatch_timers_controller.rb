@@ -9,7 +9,7 @@
 # - focus first field that needs an action, depending on above
 #
 class StopwatchTimersController < ApplicationController
-  helper :timelog
+  helper :timelog, :custom_fields
 
   before_action :require_login
   before_action :find_optional_data, only: %i(new create)
