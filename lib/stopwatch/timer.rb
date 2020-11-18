@@ -45,7 +45,7 @@ module Stopwatch
     # timestamp to either nil (stop: true) or current time.
     def update(stop: false)
       if hours = runtime_hours and entry = self.time_entry
-        time_entry.update_column :hours, entry.hours + hours
+        time_entry.update_column :hours, entry.read_attribute(:hours) + hours
       end
       data[:started_at] = stop || !running? ? nil : Time.now.to_i
       save
