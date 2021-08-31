@@ -9,8 +9,13 @@ module Stopwatch
     end
 
     def is_running_timer?(time_entry)
+      id = running_time_entry_id
+      id.present? and time_entry.id == id
+    end
+
+    def running_time_entry_id
       timer = Stopwatch::Timer.new(self)
-      timer.running? and timer.time_entry_id == time_entry.id
+      timer.time_entry_id if timer.running?
     end
   end
 end
