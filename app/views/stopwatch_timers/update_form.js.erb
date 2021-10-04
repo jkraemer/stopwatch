@@ -1,0 +1,5 @@
+$('#stopwatch_time_entry_activity_id').html('<%= escape_javascript options_for_select(activity_collection_for_select_options(@time_entry), @time_entry.activity_id) %>');
+$('#stopwatch_time_entry_issue').html('<%= escape_javascript link_to_issue(@time_entry.issue) if @time_entry.issue.try(:visible?) %>');
+$('#stopwatch_time_entry_project_id').html('<%= escape_javascript project_tree_options_for_select(Project.allowed_to(:log_time).to_a, :selected => @time_entry.project, :include_blank => true) %>');
+
+

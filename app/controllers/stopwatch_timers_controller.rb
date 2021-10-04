@@ -73,6 +73,17 @@ class StopwatchTimersController < ApplicationController
     render json: @timer.to_json
   end
 
+  def update_form
+    if id = params[:time_entry_id].presence
+      @time_entry = TimeEntry.visible.find id
+    else
+      @time_entry = TimeEntry.new
+    end
+    @time_entry.safe_attributes = params[:time_entry]
+  rescue ActiveRecord::RecordNotFound
+    head 404
+  end
+
   private
 
   def find_timer
@@ -82,7 +93,6 @@ class StopwatchTimersController < ApplicationController
 
   def find_time_entry
     @time_entry = time_entries.find params[:id]
-
   end
 
   def load_todays_entries
