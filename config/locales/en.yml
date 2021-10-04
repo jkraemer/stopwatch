@@ -1,6 +1,11 @@
 en:
   label_stopwatch_start: Start tracking
   label_stopwatch_stop: Stop tracking
+  stopwatch:
+    settings:
+      label_always_ask: 'Always ask'
+      label_default_activity: 'Default activity for "Start tracking"'
+      label_system: 'Use system default'
   stopwatch_timers:
     entries_list:
       button_stop: Stop

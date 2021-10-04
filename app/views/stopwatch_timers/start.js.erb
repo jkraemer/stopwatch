@@ -7,9 +7,10 @@
 <% end %>
 
 <% if @started_time_entry %>
-    window.stopwatch.timerStarted('<%= @started_time_entry.id %>',
-                                  '<%= j format_hours @started_time_entry.hours %>');
+    window.stopwatch.timerStarted(
+      <%= raw Stopwatch::Timer.new(User.current).to_json %>
+    );
 <% else %>
-    window.stopwatch.timerStopped();
+  window.stopwatch.timerStopped();
 <% end %>
 

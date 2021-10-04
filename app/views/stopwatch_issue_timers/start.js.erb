@@ -1,0 +1,8 @@
+<% if @started_time_entry %>
+  window.stopwatch.timerStarted(
+    <%= raw Stopwatch::Timer.new(User.current).to_json %>
+  );
+<% else %>
+  $('#ajax-modal').html('<%= j render partial: 'new' %>');
+  showModal('ajax-modal', '700px');
+<% end %>

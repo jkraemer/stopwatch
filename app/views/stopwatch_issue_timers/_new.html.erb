@@ -1,0 +1,20 @@
+<h3 class="title"><%= l(:button_log_time) %> - <%= format_date User.current.today %> - <%= "#{@issue.tracker} #{@issue.id}: #{truncate @issue.subject}" %></h3>
+
+<%= labelled_form_for @time_entry, url: stopwatch_timers_path, method: :post, remote: true do |f| %>
+  <% @time_entry.hours ||= 0 %>
+  <%= f.hidden_field :issue_id, value: @issue.id %>
+
+  <fieldset class="box tabular">
+    <legend><%= t 'stopwatch_timers.entry_form.legend_new' %></legend>
+    <p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
+    <p><%= f.text_field :comments, :size => 100, :maxlength => 1024, :required => Setting.timelog_required_fields.include?('comments') %></p>
+    <% @time_entry.custom_field_values.each do |value| %>
+      <p><%= custom_field_tag_with_label :time_entry, value %></p>
+    <% end %>
+  </fieldset>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_create) %>
+  </p>
+<% end %>
+

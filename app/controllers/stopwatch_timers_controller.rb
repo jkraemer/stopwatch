@@ -60,7 +60,9 @@ class StopwatchTimersController < StopwatchController
 
   def stop
     r = Stopwatch::StopTimer.new.call
-    unless r.success?
+    if r.success?
+      @stopped_time_entry = @time_entry
+    else
       logger.error "unable to stop timer"
     end
     new unless params[:context]

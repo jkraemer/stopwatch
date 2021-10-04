@@ -1,6 +1,7 @@
 window.initStopwatch = function(config){
   var currentTimerUrl = config.currentTimerUrl;
   var hourFormat = config.hourFormat;
+  var locales = config.locales;
 
   var hoursRe = hourFormat.replace(/0+/g, '\\d+').replace(/\./g, '\\.');
   var titleRegexp = new RegExp('^(' + hoursRe + ' - )?(.*)$');
@@ -68,12 +69,43 @@ window.initStopwatch = function(config){
     highlightRunningTimer: highlightRunningTimer,
     timerStopped: function(){
       highlightRunningTimer();
+      // fix up any issue timer start/stop links in the UI
+      // no running timer -> all links will start a timer
+      $('a.stopwatch_issue_timer').each(function(){
+        var a = $(this);
+        a.attr('href', a.attr('href').replace(/stop$/, 'start'));
+        a.text(locales.startTimer);
+      });
     },
-    timerStarted: function(entryId, spentTime){
-      highlightRunningTimer({
-        running: true,
-        time_entry_id: entryId,
-        time_spent: spentTime
+    timerStarted: function(data){
+      highlightRunningTimer(data);
+     // {
+     //   running: true,
+     //   time_entry_id: entryId,
+     //   time_spent: spentTime
+     // });
+      // fix up any issue timer start/stop links in the UI
+      // all links will start a timer, except the one for the current issue,
+      // which has to be turned into a stop link.
+      if(data.running) {
+        $('a.stopwatch_issue_timer').each(function(){
+          var a = $(this);
+          var href = a.attr('href');
+          if(data.issue_id) {
+            if(a.data('issueId') == data.issue_id) {
+              a.attr('href', href.replace(/start$/, 'stop'));
+              a.text(locales.stopTimer);
+            } else {
+              a.attr('href', href.replace(/stop$/, 'start'));
+              a.text(locales.startTimer);
+            }
+          }
+        });
+      }
+    },
+    updateStartStopLink: function(id, replacement){
+      $(id).replaceWith(function(){
+        return $(replacement, { html: $(this).html() });
       });
     },
     setProjectId: function(projectId){
