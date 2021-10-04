@@ -1,0 +1,4 @@
+<p>
+  <label for="settings_default_activity"><%= t '.label_default_activity' %> </label>
+  <%= select_tag 'settings[default_activity]', options_from_collection_for_select( [['always_ask', t('.label_always_ask')], ['system', t('.label_system')]] + TimeEntryActivity.system.active.to_a.pluck(:id, :name), :first, :last, Stopwatch.settings['default_activity'] ) %>
+</p>

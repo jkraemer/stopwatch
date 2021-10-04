@@ -1,3 +1,4 @@
+require_dependency 'stopwatch'
 require 'stopwatch/hooks'
 
 Redmine::Plugin.register :stopwatch do
@@ -8,6 +9,9 @@ Redmine::Plugin.register :stopwatch do
   version '0.1.0'
 
   requires_redmine version_or_higher: '3.4.0'
+  settings default: {
+    'default_activity' => 'always_ask',
+  }, partial: 'stopwatch/settings'
 
   menu :account_menu, :stopwatch,
     :new_stopwatch_timer_path,
