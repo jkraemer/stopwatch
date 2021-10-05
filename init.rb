@@ -19,5 +19,6 @@ end
 
 Rails.configuration.to_prepare do
   Stopwatch::UserPatch.apply
+  Stopwatch::TimeEntryPatch.apply
 end
 
