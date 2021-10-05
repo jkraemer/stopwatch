@@ -75,6 +75,10 @@ window.initStopwatch = function(config){
         time_entry_id: entryId,
         time_spent: spentTime
       });
+    },
+    setProjectId: function(projectId){
+      var a = $('a#stopwatch-menu');
+      a.attr('href', a.attr('href').replace(/\/new.*$/, '/new?project_id='+projectId));
     }
   });
 };

@@ -6,6 +6,7 @@
   <% if User.current.logged? %>
     window.stopwatch.highlightRunningTimer(
       <%= raw Stopwatch::Timer.new(User.current).to_json %>
-    )
+    );
+    window.stopwatch.setProjectId('<%= j @project&.id.to_s %>');
   <% end %>
 <% end %>
