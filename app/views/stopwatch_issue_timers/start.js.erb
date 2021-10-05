@@ -1,4 +1,5 @@
 <% if @started_time_entry %>
+  contextMenuHide();
   window.stopwatch.timerStarted(
     <%= raw Stopwatch::Timer.new(User.current).to_json %>
   );

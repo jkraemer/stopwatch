@@ -22,8 +22,9 @@ Redmine::Plugin.register :stopwatch do
 end
 
 Rails.configuration.to_prepare do
-  Stopwatch::UserPatch.apply
-  Stopwatch::TimeEntryPatch.apply
+  Stopwatch::ContextMenusControllerPatch.apply
   Stopwatch::IssuesControllerPatch.apply
+  Stopwatch::TimeEntryPatch.apply
+  Stopwatch::UserPatch.apply
 end
 
