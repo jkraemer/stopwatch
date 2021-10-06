@@ -1,4 +1,4 @@
-# Stopwatch Plugin for Redmine [![Build Status](https://travis-ci.org/jkraemer/stopwatch.svg?branch=master)](https://travis-ci.org/jkraemer/stopwatch)
+# Stopwatch Plugin for Redmine [![Build Status](https://api.travis-ci.com/jkraemer/stopwatch.svg?branch=master)](https://app.travis-ci.com/github/jkraemer/stopwatch)
 
 Minimal plugin that aims to make tracking your time with Redmine much easier.
 
