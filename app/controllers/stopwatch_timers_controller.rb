@@ -8,10 +8,8 @@
 # - same for project, unless we are in a project context
 # - focus first field that needs an action, depending on above
 #
-class StopwatchTimersController < ApplicationController
-  helper :timelog, :custom_fields
+class StopwatchTimersController < StopwatchController
 
-  before_action :require_login
   before_action :find_optional_data, only: %i(new create)
   before_action :authorize_log_time, only: %i(new create start stop current)
   before_action :find_time_entry, only: %i(edit update start stop)
@@ -62,7 +60,9 @@ class StopwatchTimersController < ApplicationController
 
   def stop
     r = Stopwatch::StopTimer.new.call
-    unless r.success?
+    if r.success?
+      @stopped_time_entry = @time_entry
+    else
       logger.error "unable to stop timer"
     end
     new unless params[:context]
@@ -71,6 +71,17 @@ class StopwatchTimersController < ApplicationController
 
   def current
     render json: @timer.to_json
+  end
+
+  def update_form
+    if id = params[:time_entry_id].presence
+      @time_entry = TimeEntry.visible.find id
+    else
+      @time_entry = TimeEntry.new
+    end
+    @time_entry.safe_attributes = params[:time_entry]
+  rescue ActiveRecord::RecordNotFound
+    head 404
   end
 
   private
@@ -82,7 +93,6 @@ class StopwatchTimersController < ApplicationController
 
   def find_time_entry
     @time_entry = time_entries.find params[:id]
-
   end
 
   def load_todays_entries

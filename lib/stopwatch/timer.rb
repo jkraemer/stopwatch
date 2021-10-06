@@ -65,7 +65,8 @@ module Stopwatch
         time_entry_id: time_entry_id,
         time_spent: formatter.format_hours,
         html_time_spent: formatter.html_hours,
-        running: running?
+        running: running?,
+        issue_id: time_entry&.issue_id
       }.to_json
     end
 

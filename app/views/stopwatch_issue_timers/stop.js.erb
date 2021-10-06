@@ -1,0 +1,6 @@
+contextMenuHide();
+window.stopwatch.updateStartStopLink(
+  '#stopwatch_stop_timer_<%= @issue.id %>',
+  '<%= j Stopwatch::IssueLinks.new(@issue).start_timer %>'
+);
+window.stopwatch.timerStopped();

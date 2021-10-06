@@ -1,7 +1,11 @@
 <%= javascript_tag do %>
   window.stopwatch = window.initStopwatch({
     currentTimerUrl: '<%= j current_stopwatch_timers_url %>',
-    hourFormat: '<%= j format_hours 0.0 %>'
+    hourFormat: '<%= j format_hours 0.0 %>',
+    locales: {
+      startTimer: '<%= j l :label_stopwatch_start %>',
+      stopTimer: '<%= j l :label_stopwatch_stop %>'
+    },
   });
   <% if User.current.logged? %>
     window.stopwatch.highlightRunningTimer(

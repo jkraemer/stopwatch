@@ -2,16 +2,19 @@
 
 <fieldset class="box tabular">
   <legend><%= t @time_entry.new_record? ? '.legend_new' : '.legend_edit' %></legend>
-  <p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
 
-  <p><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).to_a, :selected => @time_entry.project, :include_blank => true), :required => true %></p>
-
-  <p>
-    <%= f.text_field :issue_id, :size => 6, :required => Setting.timelog_required_fields.include?('issue_id') %>
-    <span id="time_entry_issue">
+  <p><label for="stopwatch_time_entry_project_id"><%= l :field_project %><span class="required"> *</span></label><%= f.select :project_id, project_tree_options_for_select(Project.allowed_to(:log_time).to_a, :selected => @time_entry.project, :include_blank => true), { no_label: true }, id: 'stopwatch_time_entry_project_id' %></p>
+  <p><label for="stopwatch_time_entry_issue_id"><%= l :field_issue %>
+  <% if Setting.timelog_required_fields.include?('issue_id') %>
+    <span class="required"> *</span>
+  <% end %>
+  </label>
+    <%= f.text_field :issue_id, :size => 6, no_label: true, id: 'stopwatch_time_entry_issue_id' %>
+    <span id="stopwatch_time_entry_issue">
       <%=  link_to_issue(@time_entry.issue) if @time_entry.issue.try(:visible?) %>
     </span>
   </p>
+  <p><label for="stopwatch_time_entry_activity_id"><%= l :field_activity %><span class="required"> *</span></label><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), { no_label: true }, id: 'stopwatch_time_entry_activity_id' %></p>
   <!--
   <p><%= f.date_field :spent_on, :size => 10, :required => true %><%= calendar_for('time_entry_spent_on') %></p>
   -->
@@ -25,19 +28,19 @@
 
 <%= javascript_tag do %>
   $(document).ready(function(){
-    $('#time_entry_project_id').change(function(){
-      $('#time_entry_issue_id').val('');
+    $('#stopwatch_time_entry_project_id').change(function(){
+      $('#stopwatch_time_entry_issue_id').val('');
     });
-    $('#time_entry_project_id, #time_entry_issue_id').change(function(){
+    $('#stopwatch_time_entry_project_id, #stopwatch_time_entry_issue_id').change(function(){
       $.ajax({
-        url: '<%= escape_javascript(@time_entry.new_record? ? new_time_entry_path(format: 'js') : edit_time_entry_path(@time_entry, format: 'js')) %>',
+        url: '<%= j update_form_stopwatch_timers_path(time_entry_id: @time_entry.id, format: 'js') %>',
         type: 'post',
         data: $(this).closest('form').serialize()
       });
     });
   });
 
-  observeAutocompleteField('time_entry_issue_id',
+  observeAutocompleteField('stopwatch_time_entry_issue_id',
     function(request, callback) {
       var url = '<%= j auto_complete_issues_path %>';
       var data = {
@@ -47,7 +50,7 @@
       <% if @time_entry.new_record? && @project %>
       project_id = '<%= @project.id %>';
       <% else %>
-      project_id = $('#time_entry_project_id').val();
+      project_id = $('#stopwatch_time_entry_project_id').val();
       <% end %>
       if(project_id){
         data['project_id'] = project_id;
@@ -65,8 +68,8 @@
     },
     {
       select: function(event, ui) {
-        $('#time_entry_issue').text('');
-        $('#time_entry_issue_id').val(ui.item.value).change();
+        $('#stopwatch_time_entry_issue').text('');
+        $('#stopwatch_time_entry_issue_id').val(ui.item.value).change();
       }
     }
   );

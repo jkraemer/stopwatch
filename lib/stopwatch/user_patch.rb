@@ -17,5 +17,10 @@ module Stopwatch
       timer = Stopwatch::Timer.new(self)
       timer.time_entry_id if timer.running?
     end
+
+    def todays_time_entry_for(issue)
+      TimeEntry.order(created_on: :desc).
+        find_or_initialize_by(user: self, issue: issue, spent_on: today)
+    end
   end
 end

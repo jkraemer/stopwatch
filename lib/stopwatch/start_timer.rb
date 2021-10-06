@@ -1,7 +1,7 @@
 module Stopwatch
   class StartTimer
 
-    Result = ImmutableStruct.new(:success?, :error)
+    Result = ImmutableStruct.new(:success?, :error, :started)
 
     def initialize(time_entry, user: User.current)
       @time_entry = time_entry
@@ -13,7 +13,6 @@ module Stopwatch
         return Result.new(error: :unauthorized)
       end
 
-      StopTimer.new(user: @user).call
 
       @time_entry.hours = 0 if @time_entry.hours.nil?
       # we want to start tracking time if this is an existing time entry, or a
@@ -21,9 +20,13 @@ module Stopwatch
       # new entries with hours > 0 are just saved as is.
       start_timer = !@time_entry.new_record? || @time_entry.hours == 0
 
+      # stop currently running timer, but only when there is a chance for us
+      # to succeed creating the new one.
+      StopTimer.new(user: @user).call if @time_entry.valid?
+
       if @time_entry.save
         start_new_timer if start_timer
-        return Result.new(success: true)
+        return Result.new(success: true, started: start_timer)
       else
         Rails.logger.error("could not save time entry: \n#{@time_entry.errors.inspect}")
         return Result.new(error: :invalid)

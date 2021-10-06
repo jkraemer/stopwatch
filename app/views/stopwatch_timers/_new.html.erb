@@ -1,10 +1,12 @@
 <h3 class="title"><%= l(:button_log_time) %> - <%= format_date User.current.today %></h3>
 
-<%= render partial: 'entries_list', locals: { entries: @entries } %>
+<% if @entries %>
+  <%= render partial: 'stopwatch_timers/entries_list', locals: { entries: @entries } %>
+<% end %>
 
 <%= labelled_form_for @time_entry, url: stopwatch_timers_path, method: :post, remote: true do |f| %>
   <% @time_entry.hours ||= 0 %>
-  <%= render partial: 'entry_form', locals: { f: f } %>
+  <%= render partial: 'stopwatch_timers/entry_form', locals: { f: f } %>
 
   <p class="buttons">
     <%= submit_tag l(:button_create) %>
