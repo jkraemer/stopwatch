@@ -38,7 +38,7 @@ fi
 # copy plugin to Redmine plugins dir.
 rm -fr plugins/$NAME_OF_PLUGIN
 mkdir plugins/$NAME_OF_PLUGIN
-cp -a $PATH_TO_PLUGIN/* plugins/$NAME_OF_PLUGIN/
+rsync -a --exclude=testspace $PATH_TO_PLUGIN/* plugins/$NAME_OF_PLUGIN/
 
 mv $TESTSPACE/database.yml.travis config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
