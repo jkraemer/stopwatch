@@ -7,7 +7,6 @@ rvm:
 branches:
   only:
     - master
-    - feature/start-stop-ticket
 
 addons:
   postgresql: "9.6"
@@ -16,6 +15,11 @@ env:
   - REDMINE_VER=4.1-stable
   - REDMINE_VER=4.2-stable
   - REDMINE_VER=master
+
+jobs:
+  exclude:
+    - rvm: 2.7.4
+      env: REDMINE_VER=4.1-stable
 
 install: "echo skip bundle install"
 
