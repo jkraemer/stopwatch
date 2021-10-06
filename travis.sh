@@ -35,8 +35,10 @@ then
   git checkout -b $REDMINE_GIT_TAG origin/$REDMINE_GIT_TAG
 fi
 
-# create a link to the plugin
-ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
+# copy plugin to Redmine plugins dir.
+rm -fr plugins/$NAME_OF_PLUGIN
+mkdir plugins/$NAME_OF_PLUGIN
+cp -a $PATH_TO_PLUGIN/* plugins/$NAME_OF_PLUGIN/
 
 mv $TESTSPACE/database.yml.travis config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
