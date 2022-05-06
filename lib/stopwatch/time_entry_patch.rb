@@ -16,3 +16,7 @@ module Stopwatch
     end
   end
 end
+
+unless TimeEntry.included_modules.include?(Stopwatch::TimeEntryPatch)
+  TimeEntry.send(:include, Stopwatch::TimeEntryPatch)
+end

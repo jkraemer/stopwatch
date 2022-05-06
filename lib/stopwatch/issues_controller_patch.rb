@@ -24,3 +24,7 @@ module Stopwatch
     end
   end
 end
+
+unless IssuesController.included_modules.include?(Stopwatch::IssuesControllerPatch)
+  IssuesController.send(:include, Stopwatch::IssuesControllerPatch)
+end

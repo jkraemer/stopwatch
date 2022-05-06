@@ -1,5 +1,4 @@
 require_dependency 'stopwatch'
-require 'stopwatch/hooks'
 
 Redmine::Plugin.register :stopwatch do
   name 'Redmine Stopwatch Plugin'
@@ -21,10 +20,9 @@ Redmine::Plugin.register :stopwatch do
     if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
 
-Rails.configuration.to_prepare do
-  Stopwatch::ContextMenusControllerPatch.apply
-  Stopwatch::IssuesControllerPatch.apply
-  Stopwatch::TimeEntryPatch.apply
-  Stopwatch::UserPatch.apply
-end
+require File.dirname(__FILE__) + '/lib/stopwatch/hooks'
 
+require File.dirname(__FILE__) + '/lib/stopwatch/context_menus_controller_patch'
+require File.dirname(__FILE__) + '/lib/stopwatch/issues_controller_patch'
+require File.dirname(__FILE__) + '/lib/stopwatch/time_entry_patch'
+require File.dirname(__FILE__) + '/lib/stopwatch/user_patch'

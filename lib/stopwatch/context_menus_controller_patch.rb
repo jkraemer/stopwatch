@@ -27,3 +27,6 @@ module Stopwatch
   end
 end
 
+unless ContextMenusController.included_modules.include?(Stopwatch::ContextMenusControllerPatch)
+  ContextMenusController.send(:include, Stopwatch::ContextMenusControllerPatch)
+end

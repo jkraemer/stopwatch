@@ -24,3 +24,7 @@ module Stopwatch
     end
   end
 end
+
+unless User.included_modules.include?(Stopwatch::UserPatch)
+  User.send(:include, Stopwatch::UserPatch)
+end
