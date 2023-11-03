@@ -1,4 +1,4 @@
-require_relative '../test_helper'
+require File.expand_path('../../test_helper', __FILE__)
 
 class TimerTest < ActiveSupport::TestCase
   fixtures :users, :user_preferences, :time_entries
