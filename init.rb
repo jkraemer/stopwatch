@@ -1,14 +1,11 @@
-require_dependency 'stopwatch'
-require 'stopwatch/hooks'
-
 Redmine::Plugin.register :stopwatch do
   name 'Redmine Stopwatch Plugin'
   author 'Jens Krämer'
   author_url 'https://jkraemer.net/'
   description "Start/stop timer and quick access to today's time bookings for Redmine"
-  version '0.2.0'
+  version '1.0.0'
 
-  requires_redmine version_or_higher: '3.4.0'
+  requires_redmine version_or_higher: '5.0.0'
   settings default: {
     'default_activity' => 'always_ask',
   }, partial: 'stopwatch/settings'
@@ -21,10 +18,4 @@ Redmine::Plugin.register :stopwatch do
     if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
 
-Rails.configuration.to_prepare do
-  Stopwatch::ContextMenusControllerPatch.apply
-  Stopwatch::IssuesControllerPatch.apply
-  Stopwatch::TimeEntryPatch.apply
-  Stopwatch::UserPatch.apply
-end
-
+Stopwatch.setup

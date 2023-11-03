@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module Stopwatch
+  def self.setup
+    Stopwatch::ContextMenusControllerPatch.apply
+    Stopwatch::IssuesControllerPatch.apply
+    ::TimeEntry.prepend Stopwatch::TimeEntryPatch
+    ::User.prepend Stopwatch::UserPatch
+    Stopwatch::Hooks # just load it
+  end
+
+
   def self.settings
     Setting.plugin_stopwatch
   end

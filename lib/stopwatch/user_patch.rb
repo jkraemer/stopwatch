@@ -1,8 +1,6 @@
 module Stopwatch
   module UserPatch
-    def self.apply
-      User.prepend self unless User < self
-    end
+    extend ActiveSupport::Concern
 
     def timer_running?
       Stopwatch::Timer.new(self).running?

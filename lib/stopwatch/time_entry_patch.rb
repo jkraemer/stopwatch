@@ -1,13 +1,9 @@
 module Stopwatch
   module TimeEntryPatch
-    def self.apply
-      TimeEntry.prepend self unless TimeEntry < self
-    end
+    extend ActiveSupport::Concern
 
-    def self.prepended(base)
-      base.class_eval do
-        before_destroy :stop_timer
-      end
+    prepended do
+      before_destroy :stop_timer
     end
 
     def stop_timer
