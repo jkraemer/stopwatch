@@ -17,11 +17,11 @@
     <td class="hours"><%= html_hours(format_hours(entry.hours)) %></td>
     <td class="buttons">
       <% if running %>
-        <%= link_to t(:label_stopwatch_stop), stop_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
+        <%= link_to sprite_icon(:time, t(:label_stopwatch_stop)), stop_stopwatch_timer_path(entry), remote: true, class: "icon-only", method: :put %>
       <% else %>
-        <%= link_to t(:label_stopwatch_start), start_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-time", method: :put %>
+        <%= link_to sprite_icon(:time, t(:label_stopwatch_start)), start_stopwatch_timer_path(entry), remote: true, class: "icon-only", method: :put %>
       <% end %>
-      <%= link_to l(:button_edit), edit_stopwatch_timer_path(entry), remote: true, class: "icon-only icon-edit" if entry.editable_by? User.current %>
+      <%= link_to sprite_icon(:edit, l(:button_edit)), edit_stopwatch_timer_path(entry), remote: true, class: "icon-only" if entry.editable_by? User.current %>
     </td>
   </tr>
 <% end -%>

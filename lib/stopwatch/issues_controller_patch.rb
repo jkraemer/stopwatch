@@ -8,9 +8,9 @@ module Stopwatch
         if User.current.allowed_to?(:log_time, issue.project)
           t = Stopwatch::IssueTimer.new(issue: issue)
           if t.running?
-            link << IssueLinks.new(issue).stop_timer
+            link << IssueLinks.new(issue, self).stop_timer
           else
-            link << IssueLinks.new(issue).start_timer
+            link << IssueLinks.new(issue, self).start_timer
           end
         end
         link.html_safe + super
