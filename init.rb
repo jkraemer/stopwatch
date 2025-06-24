@@ -3,9 +3,9 @@ Redmine::Plugin.register :stopwatch do
   author 'Jens Krämer'
   author_url 'https://jkraemer.net/'
   description "Start/stop timer and quick access to today's time bookings for Redmine"
-  version '1.0.0'
+  version '1.1.0'
 
-  requires_redmine version_or_higher: '5.0.0'
+  requires_redmine version_or_higher: '6.0.0'
   settings default: {
     'default_activity' => 'always_ask',
   }, partial: 'stopwatch/settings'
