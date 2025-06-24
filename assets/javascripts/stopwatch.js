@@ -74,7 +74,7 @@ window.initStopwatch = function(config){
       $('a.stopwatch_issue_timer').each(function(){
         var a = $(this);
         a.attr('href', a.attr('href').replace(/stop$/, 'start'));
-        a.text(locales.startTimer);
+        a.find('span').text(locales.startTimer);
       });
     },
     timerStarted: function(data){
@@ -94,10 +94,10 @@ window.initStopwatch = function(config){
           if(data.issue_id) {
             if(a.data('issueId') == data.issue_id) {
               a.attr('href', href.replace(/start$/, 'stop'));
-              a.text(locales.stopTimer);
+              a.find('span').text(locales.stopTimer);
             } else {
               a.attr('href', href.replace(/stop$/, 'start'));
-              a.text(locales.startTimer);
+              a.find('span').text(locales.startTimer);
             }
           }
         });

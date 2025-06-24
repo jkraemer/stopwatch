@@ -1,4 +1,4 @@
-require File.expand_path('../../test_helper', __FILE__)
+require File.expand_path('../test_helper', __dir__)
 
 class TicketTimerTest < Redmine::IntegrationTest
   include ActiveJob::TestHelper
@@ -30,6 +30,7 @@ class TicketTimerTest < Redmine::IntegrationTest
     assert_not_running
 
     get "/issues/1"
+    assert_response :success
     assert_select "div.contextual a", text: /start tracking/i
     assert_no_difference ->{TimeEntry.count} do
       post "/issues/1/timer/start", xhr: true
@@ -77,7 +78,7 @@ class TicketTimerTest < Redmine::IntegrationTest
     TimeEntry.delete_all
     assert_no_difference ->{TimeEntry.count} do
       post "/issues/1/timer/start", xhr: true
-      assert_response 200
+      assert_response :ok
     end
   end
 
@@ -86,7 +87,7 @@ class TicketTimerTest < Redmine::IntegrationTest
     TimeEntry.delete_all
     with_settings plugin_stopwatch: { 'default_activity' => 'system'} do
       post "/issues/1/timer/start", xhr: true
-      assert_response 201
+      assert_response :created
     end
     assert te = TimeEntry.last
     assert_equal 1, te.issue_id
@@ -98,18 +99,17 @@ class TicketTimerTest < Redmine::IntegrationTest
     TimeEntry.delete_all
     with_settings plugin_stopwatch: { 'default_activity' => '9'} do
       post "/issues/1/timer/start", xhr: true
-      assert_response 201
+      assert_response :created
     end
     assert te = TimeEntry.last
     assert_equal 1, te.issue_id
     assert_equal 9, te.activity_id
   end
 
-
   private
 
   def assert_not_running
-    refute Stopwatch::Timer.new(User.find(@user.id)).running?
+    assert_not Stopwatch::Timer.new(User.find(@user.id)).running?
   end
 
   def assert_running
