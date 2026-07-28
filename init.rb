@@ -18,4 +18,6 @@ Redmine::Plugin.register :stopwatch do
     if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
 
-Stopwatch.setup
+Rails.application.config.to_prepare do
+  Stopwatch.setup
+end
