@@ -2,7 +2,8 @@
 
 module Stopwatch
   def self.setup
-    Stopwatch::ContextMenusControllerPatch.apply
+    log "Setup"
+    #Stopwatch::ContextMenusControllerPatch.apply
     Stopwatch::IssuesControllerPatch.apply
     ::TimeEntry.prepend Stopwatch::TimeEntryPatch
     ::User.prepend Stopwatch::UserPatch

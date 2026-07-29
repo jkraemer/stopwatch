@@ -5,7 +5,7 @@ Redmine::Plugin.register :stopwatch do
   description "Start/stop timer and quick access to today's time bookings for Redmine"
   version '1.1.0'
 
-  requires_redmine version_or_higher: '6.0.0'
+  requires_redmine version_or_higher: '7.0.0'
   settings default: {
     'default_activity' => 'always_ask',
   }, partial: 'stopwatch/settings'
@@ -18,6 +18,4 @@ Redmine::Plugin.register :stopwatch do
     if: ->(*_){ User.current.logged? and User.current.allowed_to?(:log_time, nil, global: true) }
 end
 
-Rails.application.config.to_prepare do
-  Stopwatch.setup
-end
+Stopwatch.setup
