@@ -1,0 +1,22 @@
+a.stopwatch_issue_timer[href*="stop"] {
+  color: red;
+}
+
+a.stopwatch_issue_timer[href*="start"] {
+  color: limegreen;
+}
+
+/* Mobile only */
+@media (max-width: 899px) {
+  a.stopwatch_issue_timer[href*="stop"] {
+    color: red;
+    background-color: #ffe5e5;
+    border: 1px solid red;
+  }
+
+  a.stopwatch_issue_timer[href*="start"] {
+    color: limegreen;
+    background-color: #eaffea; 
+    border: 1px solid limegreen; 
+  }
+}

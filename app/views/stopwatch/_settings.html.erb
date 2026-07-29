@@ -2,3 +2,8 @@
   <label for="settings_default_activity"><%= t '.label_default_activity' %> </label>
   <%= select_tag 'settings[default_activity]', options_from_collection_for_select( [['always_ask', t('.label_always_ask')], ['system', t('.label_system')]] + TimeEntryActivity.system.active.to_a.pluck(:id, :name), :first, :last, Stopwatch.settings['default_activity'] ) %>
 </p>
+
+<p>
+  <label for="settings_highlighted_links"><%= t '.label_highlighted_links' %> </label>
+  <%= check_box_tag 'settings[highlighted_links]', 1, Setting.plugin_stopwatch[:highlighted_links] %>
+</p>
